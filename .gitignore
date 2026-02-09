@@ -49,5 +49,8 @@ out/
 *.tmp
 
 # Mobile
-mobile-app/.expo/
-mobile-app/dist/
+mobile-app/
+mobile-app2/
+.expo/
+dist/
+*.zip
