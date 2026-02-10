@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const API_URL = 'https://expenseflow-fvo0.onrender.com/api';
 
-// Create axios instance
+// Create axios instance with default config
 const api = axios.create({
     baseURL: API_URL,
     headers: {
@@ -19,18 +19,7 @@ api.interceptors.request.use(
         }
         return config;
     },
-    (error) => Promise.reject(error)
-);
-
-// Handle response errors
-api.interceptors.response.use(
-    (response) => response,
     (error) => {
-        if (error.response?.status === 401) {
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
-            window.location.href = '/login';
-        }
         return Promise.reject(error);
     }
 );
@@ -39,32 +28,80 @@ api.interceptors.response.use(
 export const authAPI = {
     login: (credentials) => api.post('/auth/login', credentials),
     register: (userData) => api.post('/auth/register', userData),
-    getMe: () => api.get('/auth/me')
-};
-
-// Expense API
-export const expenseAPI = {
-    getAll: (params) => api.get('/expenses', { params }),
-    getOne: (id) => api.get(`/expenses/${id}`),
-    create: (data) => api.post('/expenses', data),
-    update: (id, data) => api.put(`/expenses/${id}`, data),
-    delete: (id) => api.delete(`/expenses/${id}`)
-};
-
-// Analytics API
-export const analyticsAPI = {
-    getDashboard: (userId) => api.get('/analytics/dashboard', { params: { user: userId } }),
-    getFamily: () => api.get('/analytics/family'),
-    getTrends: (months) => api.get('/analytics/trends', { params: { months } })
 };
 
 // User API
 export const userAPI = {
     getAll: () => api.get('/users'),
-    getOne: (id) => api.get(`/users/${id}`),
-    update: (id, data) => api.put(`/users/${id}`, data),
+    getById: (id) => api.get(`/users/${id}`),
+    create: (userData) => api.post('/users', userData),
+    update: (id, userData) => api.put(`/users/${id}`, userData),
+    updateRole: (id, role) => api.put(`/users/${id}`, { role }),
     delete: (id) => api.delete(`/users/${id}`),
-    toggleStatus: (id) => api.patch(`/users/${id}/toggle-status`)
+    getBalance: (id) => api.get(`/users/${id}/balance`),
+};
+
+// Account API
+export const accountAPI = {
+    getAll: () => api.get('/accounts'),
+    getById: (id) => api.get(`/accounts/${id}`),
+    create: (accountData) => api.post('/accounts', accountData),
+    update: (id, accountData) => api.put(`/accounts/${id}`, accountData),
+    delete: (id) => api.delete(`/accounts/${id}`),
+    getBalance: (id) => api.get(`/accounts/${id}/balance`),
+};
+
+// Category API
+export const categoryAPI = {
+    getAll: (type) => api.get('/categories', { params: { type } }),
+    getIncome: () => api.get('/categories/income'),
+    getExpense: () => api.get('/categories/expense'),
+    getById: (id) => api.get(`/categories/${id}`),
+    create: (categoryData) => api.post('/categories', categoryData),
+    update: (id, categoryData) => api.put(`/categories/${id}`, categoryData),
+    setBudget: (id, monthlyBudget) => api.put(`/categories/${id}/budget`, { monthlyBudget }),
+    delete: (id) => api.delete(`/categories/${id}`),
+};
+
+// Expense API
+export const expenseAPI = {
+    getAll: () => api.get('/expenses'),
+    getById: (id) => api.get(`/expenses/${id}`),
+    create: (expenseData) => api.post('/expenses', expenseData),
+    update: (id, expenseData) => api.put(`/expenses/${id}`, expenseData),
+    delete: (id) => api.delete(`/expenses/${id}`),
+    transfer: (transferData) => api.post('/expenses/transfer', transferData),
+};
+
+// Transaction API (for new income/expense/transfer system)
+export const transactionAPI = {
+    getAll: () => api.get('/transactions'),
+    getById: (id) => api.get(`/transactions/${id}`),
+    getByUser: (userId) => api.get(`/transactions/user/${userId}`),
+    getByAccount: (accountId) => api.get(`/transactions/account/${accountId}`),
+    create: (transactionData) => api.post('/transactions', transactionData),
+    update: (id, transactionData) => api.put(`/transactions/${id}`, transactionData),
+    delete: (id) => api.delete(`/transactions/${id}`),
+};
+
+// Debt API
+export const debtAPI = {
+    getAll: () => api.get('/debts'),
+    create: (debtData) => api.post('/debts', debtData),
+    update: (id, debtData) => api.put(`/debts/${id}`, debtData),
+    addPayment: (id, paymentData) => api.post(`/debts/${id}/payments`, paymentData),
+    delete: (id) => api.delete(`/debts/${id}`),
+
+};
+
+// Analytics API
+export const analyticsAPI = {
+    getDashboard: () => api.get('/analytics/dashboard'),
+    getByUser: (userId) => api.get(`/analytics/user/${userId}`),
+    getByCategory: (categoryId) => api.get(`/analytics/category/${categoryId}`),
+    getByAccount: (accountId) => api.get(`/analytics/account/${accountId}`),
+
+    getBudgetVsActual: () => api.get('/analytics/budget-vs-actual'),
 };
 
 export default api;

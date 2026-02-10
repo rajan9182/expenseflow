@@ -30,14 +30,20 @@ const Login = () => {
         setLoading(true);
 
         try {
+            let result;
             if (isLogin) {
-                await login(formData.email, formData.password);
+                result = await login({ email: formData.email, password: formData.password });
             } else {
-                await register(formData.name, formData.email, formData.password);
+                result = await register({ name: formData.name, email: formData.email, password: formData.password });
             }
-            navigate('/dashboard');
+
+            if (result.success) {
+                navigate('/dashboard');
+            } else {
+                setError(result.error);
+            }
         } catch (err) {
-            setError(err.response?.data?.error || 'An error occurred');
+            setError('An error occurred');
         } finally {
             setLoading(false);
         }
@@ -47,49 +53,42 @@ const Login = () => {
         setLoading(true);
         setError('');
         try {
-            await login(email, password);
-            navigate('/dashboard');
+            const result = await login({ email, password });
+            if (result.success) {
+                navigate('/dashboard');
+            } else {
+                setError(result.error);
+            }
         } catch (err) {
-            setError(err.response?.data?.error || 'Demo login failed');
+            setError('Demo login failed');
         } finally {
             setLoading(false);
         }
     };
 
     return (
-        <div className="login-container">
-            <div className="login-card">
-                {/* Header */}
-                <div className="login-header">
-                    <div className="login-logo">
-                        <i className="fa-solid fa-wallet"></i>
-                    </div>
-                    <h1 className="login-title">Family Expense Manager</h1>
-                    <p className="login-subtitle">
-                        {isLogin ? 'Sign in to your account' : 'Create a new account'}
-                    </p>
-                </div>
+        <div className="login-page">
+            <div className="login-box">
+                <h1 className="login-heading">{isLogin ? 'Sign In' : 'Create Account'}</h1>
+                <p className="login-subtext">
+                    {isLogin ? 'Enter your credentials to access your account' : 'Fill in the details to create a new account'}
+                </p>
 
-                {/* Error Alert */}
                 {error && (
-                    <div className="alert alert-danger">
+                    <div className="error-message">
                         <i className="fa-solid fa-circle-exclamation"></i>
                         {error}
                     </div>
                 )}
 
-                {/* Login Form */}
                 <form onSubmit={handleSubmit} className="login-form">
                     {!isLogin && (
-                        <div className="form-group">
-                            <label className="form-label">
-                                <i className="fa-solid fa-user"></i>
-                                Full Name
-                            </label>
+                        <div className="input-wrapper">
+                            <label htmlFor="name">Full Name</label>
                             <input
+                                id="name"
                                 type="text"
                                 name="name"
-                                className="form-input"
                                 placeholder="Enter your name"
                                 value={formData.name}
                                 onChange={handleChange}
@@ -98,15 +97,12 @@ const Login = () => {
                         </div>
                     )}
 
-                    <div className="form-group">
-                        <label className="form-label">
-                            <i className="fa-solid fa-envelope"></i>
-                            Email Address
-                        </label>
+                    <div className="input-wrapper">
+                        <label htmlFor="email">Email Address</label>
                         <input
+                            id="email"
                             type="email"
                             name="email"
-                            className="form-input"
                             placeholder="Enter your email"
                             value={formData.email}
                             onChange={handleChange}
@@ -114,15 +110,12 @@ const Login = () => {
                         />
                     </div>
 
-                    <div className="form-group">
-                        <label className="form-label">
-                            <i className="fa-solid fa-lock"></i>
-                            Password
-                        </label>
+                    <div className="input-wrapper">
+                        <label htmlFor="password">Password</label>
                         <input
+                            id="password"
                             type="password"
                             name="password"
-                            className="form-input"
                             placeholder="Enter your password"
                             value={formData.password}
                             onChange={handleChange}
@@ -130,84 +123,104 @@ const Login = () => {
                         />
                     </div>
 
-                    <button type="submit" className="btn btn-primary btn-block" disabled={loading}>
+                    {isLogin && (
+                        <div className="form-extras">
+                            <label className="remember-me">
+                                <input type="checkbox" />
+                                <span>Remember me</span>
+                            </label>
+                            <a href="#" className="forgot-link">Forgot password?</a>
+                        </div>
+                    )}
+
+                    <button type="submit" className="submit-btn" disabled={loading}>
                         {loading ? (
                             <>
                                 <span className="spinner"></span>
                                 Processing...
                             </>
                         ) : (
-                            <>
-                                <i className={`fa-solid ${isLogin ? 'fa-right-to-bracket' : 'fa-user-plus'}`}></i>
-                                {isLogin ? 'Sign In' : 'Create Account'}
-                            </>
+                            isLogin ? 'Sign In' : 'Create Account'
                         )}
                     </button>
                 </form>
 
-                {/* Toggle Login/Register */}
-                <div className="login-toggle">
+                <div className="toggle-form">
+                    {isLogin ? "Don't have an account? " : 'Already have an account? '}
                     <button
                         type="button"
-                        className="btn-link"
+                        className="toggle-btn"
                         onClick={() => {
                             setIsLogin(!isLogin);
                             setError('');
                             setFormData({ name: '', email: '', password: '' });
                         }}
                     >
-                        {isLogin ? "Don't have an account? Sign up" : 'Already have an account? Sign in'}
+                        {isLogin ? 'Create one' : 'Sign in'}
                     </button>
                 </div>
 
-                {/* Demo Accounts */}
                 {isLogin && (
-                    <div className="demo-accounts">
+                    <>
                         <div className="divider">
-                            <span>Quick Demo Access</span>
+                            <span>Or continue with demo accounts</span>
                         </div>
 
-                        <div className="demo-grid">
+                        <div className="demo-buttons">
                             <button
                                 type="button"
-                                className="demo-btn demo-admin"
-                                onClick={() => handleDemoLogin('rajan@family.com', 'Rajan@123')}
+                                className="demo-btn"
+                                onClick={() => handleDemoLogin('admin@family.com', 'admin123')}
                                 disabled={loading}
                             >
                                 <i className="fa-solid fa-user-tie"></i>
-                                <span className="demo-label">Admin (Rajan)</span>
-                                <span className="demo-email">rajan@family.com</span>
+                                <div>
+                                    <div className="demo-name">Admin</div>
+                                    <div className="demo-email">admin@family.com</div>
+                                </div>
                             </button>
 
                             <button
                                 type="button"
-                                className="demo-btn demo-member"
-                                onClick={() => handleDemoLogin('papa@family.com', 'Papa@123')}
+                                className="demo-btn"
+                                onClick={() => handleDemoLogin('papa@family.com', 'papa123')}
                                 disabled={loading}
                             >
                                 <i className="fa-solid fa-user"></i>
-                                <span className="demo-label">Papa</span>
-                                <span className="demo-email">papa@family.com</span>
+                                <div>
+                                    <div className="demo-name">Papa</div>
+                                    <div className="demo-email">papa@family.com</div>
+                                </div>
                             </button>
 
                             <button
                                 type="button"
-                                className="demo-btn demo-member"
-                                onClick={() => handleDemoLogin('mummy@family.com', 'Mummy@123')}
+                                className="demo-btn"
+                                onClick={() => handleDemoLogin('mummy@family.com', 'mummy123')}
                                 disabled={loading}
                             >
                                 <i className="fa-solid fa-user"></i>
-                                <span className="demo-label">Mummy</span>
-                                <span className="demo-email">mummy@family.com</span>
+                                <div>
+                                    <div className="demo-name">Mummy</div>
+                                    <div className="demo-email">mummy@family.com</div>
+                                </div>
+                            </button>
+
+                            <button
+                                type="button"
+                                className="demo-btn"
+                                onClick={() => handleDemoLogin('sister@family.com', 'sister123')}
+                                disabled={loading}
+                            >
+                                <i className="fa-solid fa-user"></i>
+                                <div>
+                                    <div className="demo-name">Sister</div>
+                                    <div className="demo-email">sister@family.com</div>
+                                </div>
                             </button>
                         </div>
-                    </div>
+                    </>
                 )}
-            </div>
-
-            {/* Footer */}
-            <div className="login-footer">
-                <p>&copy; 2026 Family Expense Manager. All rights reserved.</p>
             </div>
         </div>
     );

@@ -16,35 +16,25 @@ export const formatDate = (date) => {
     });
 };
 
-// Category helpers with FontAwesome icons
-export const getCategoryColor = (category) => {
-    const colors = {
-        Groceries: 'success',
-        Bills: 'warning',
-        Medical: 'danger',
-        Entertainment: 'primary',
-        Shopping: 'secondary',
-        Transport: 'info',
-        Education: 'primary',
-        Food: 'success',
-        Other: 'secondary',
+// Get category color class from category object
+export const getCategoryColor = (categoryObj) => {
+    if (!categoryObj) return 'secondary';
+    // Convert hex color to badge class
+    const colorMap = {
+        '#2563eb': 'primary',
+        '#10b981': 'success',
+        '#f59e0b': 'warning',
+        '#ef4444': 'danger',
+        '#64748b': 'secondary',
+        '#06b6d4': 'info',
     };
-    return colors[category] || 'secondary';
+    return colorMap[categoryObj.color] || 'secondary';
 };
 
-export const getCategoryIcon = (category) => {
-    const icons = {
-        Groceries: 'fa-solid fa-cart-shopping',
-        Bills: 'fa-solid fa-file-invoice-dollar',
-        Medical: 'fa-solid fa-kit-medical',
-        Entertainment: 'fa-solid fa-film',
-        Shopping: 'fa-solid fa-bag-shopping',
-        Transport: 'fa-solid fa-car',
-        Education: 'fa-solid fa-graduation-cap',
-        Food: 'fa-solid fa-utensils',
-        Other: 'fa-solid fa-ellipsis',
-    };
-    return icons[category] || 'fa-solid fa-circle';
+// Get category icon from category object
+export const getCategoryIcon = (categoryObj) => {
+    if (!categoryObj) return 'fa-solid fa-circle';
+    return categoryObj.icon || 'fa-solid fa-circle';
 };
 
 // Payment method helpers with FontAwesome icons

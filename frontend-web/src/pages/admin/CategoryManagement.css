@@ -1,0 +1,202 @@
+/* ============================================
+   CATEGORY MANAGEMENT - MODERN DESIGN
+   ============================================ */
+.category-management-page {
+    padding: 0;
+}
+
+/* Modern Tabs */
+.modern-tabs {
+    display: flex;
+    background-color: var(--slate-100);
+    padding: 6px;
+    border-radius: var(--radius-xl);
+    position: relative;
+    margin-bottom: var(--spacing-2xl);
+    max-width: 400px;
+}
+
+.modern-tab {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    padding: 12px;
+    border: none;
+    background: none;
+    color: var(--text-tertiary);
+    font-weight: var(--font-weight-semibold);
+    font-size: var(--font-size-md);
+    cursor: pointer;
+    z-index: 1;
+    transition: color var(--transition-base);
+}
+
+.category-management-page .modern-tab.active {
+    color: var(--primary-600);
+    background: none;
+}
+
+.modern-tabs-track {
+    position: absolute;
+    top: 6px;
+    bottom: 6px;
+    width: calc(50% - 6px);
+    background-color: white;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Categories Grid */
+.categories-display-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: var(--spacing-xl);
+}
+
+/* Category Display Card */
+.category-display-card {
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-xl);
+    transition: all var(--transition-base);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xl);
+    position: relative;
+    overflow: hidden;
+}
+
+.category-card-accent {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 4px;
+    background-color: var(--cat-color);
+    opacity: 0.8;
+}
+
+.category-display-card:hover {
+    box-shadow: var(--shadow-xl);
+    border-color: var(--primary-200);
+    transform: translateX(4px);
+}
+
+/* Icon Section */
+.category-display-icon {
+    width: 56px;
+    height: 56px;
+    background-color: var(--slate-50);
+    color: var(--cat-color);
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+    transition: all var(--transition-base);
+}
+
+.category-display-card:hover .category-display-icon {
+    background-color: var(--cat-color);
+    color: white;
+    transform: scale(1.05);
+}
+
+/* Content Section */
+.category-display-content {
+    flex: 1;
+}
+
+.category-display-name {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-bold);
+    color: var(--text-primary);
+    margin: 0 0 4px 0;
+}
+
+.category-display-budget {
+    display: flex;
+    flex-direction: column;
+}
+
+.budget-label {
+    font-size: var(--font-size-xs);
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: var(--font-weight-semibold);
+}
+
+.budget-value {
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-bold);
+    color: var(--success-600);
+}
+
+/* Actions Section */
+.category-display-actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    opacity: 0;
+    transition: opacity var(--transition-fast);
+}
+
+.category-display-card:hover .category-display-actions {
+    opacity: 1;
+}
+
+/* Amount Input Wrapper */
+.amount-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.currency-symbol {
+    position: absolute;
+    left: var(--spacing-md);
+    color: var(--text-tertiary);
+    font-weight: var(--font-weight-bold);
+}
+
+.amount-input-wrapper .form-input {
+    padding-left: 2.5rem;
+}
+
+/* Empty State */
+.empty-state {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: var(--spacing-3xl);
+    background-color: var(--bg-primary);
+    border: 2px dashed var(--border-color);
+    border-radius: var(--radius-xl);
+}
+
+.empty-state i {
+    font-size: 3rem;
+    color: var(--text-tertiary);
+    margin-bottom: var(--spacing-lg);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .categories-display-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .category-display-actions {
+        opacity: 1;
+        flex-direction: row;
+    }
+
+    .modern-tabs {
+        max-width: 100%;
+    }
+}

@@ -1,0 +1,231 @@
+.debt-management-page {
+    padding: 2rem;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.debt-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.debt-summary-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border-radius: 1.5rem;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.debt-summary-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.debt-summary-card.borrowed {
+    border-left: 5px solid var(--danger-500);
+}
+
+.debt-summary-card.lent {
+    border-left: 5px solid var(--success-500);
+}
+
+.summary-label {
+    font-size: 0.9rem;
+    color: var(--slate-400);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.summary-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--slate-50);
+}
+
+.debt-list {
+    display: grid;
+    gap: 1rem;
+}
+
+.debt-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 1.25rem;
+    padding: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.debt-card:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.debt-info {
+    flex: 1;
+}
+
+.debt-main {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+}
+
+.debt-main h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    color: var(--slate-50);
+}
+
+.debt-tag {
+    padding: 0.25rem 0.75rem;
+    border-radius: 2rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.debt-tag.borrowed {
+    background: rgba(244, 63, 94, 0.1);
+    color: var(--danger-400);
+}
+
+.debt-tag.lent {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--success-400);
+}
+
+.debt-details {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.detail-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.detail-label {
+    font-size: 0.75rem;
+    color: var(--slate-400);
+}
+
+.detail-value {
+    font-weight: 500;
+    color: var(--slate-200);
+}
+
+.detail-value.highlight {
+    color: var(--primary-400);
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.debt-description {
+    font-size: 0.875rem;
+    color: var(--slate-500);
+    margin: 0.5rem 0 0 0;
+    font-style: italic;
+}
+
+.debt-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.75rem;
+}
+
+.status-badge {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.6rem;
+    border-radius: 0.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--slate-300);
+}
+
+.status-badge.settled {
+    background: var(--success-500);
+    color: white;
+}
+
+/* Modal Styling */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 1rem;
+}
+
+.modal-content {
+    background: var(--slate-900);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 1.5rem;
+    padding: 2rem;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    animation: slideUp 0.3s ease-out;
+}
+
+.modal-content h2 {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    color: var(--slate-50);
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@media (max-width: 768px) {
+    .debt-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.5rem;
+    }
+
+    .debt-actions {
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .debt-details {
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+}

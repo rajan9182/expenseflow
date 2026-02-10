@@ -1,0 +1,259 @@
+/* ============================================
+   BUDGET MANAGEMENT - MODERN DESIGN
+   ============================================ */
+.budget-management-page {
+    padding: 0;
+}
+
+/* Overview Grid */
+.budget-overview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--spacing-xl);
+    margin-bottom: var(--spacing-3xl);
+}
+
+.budget-overview-card {
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-xl);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xl);
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.budget-overview-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+}
+
+.overview-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+.primary .overview-icon {
+    background-color: var(--primary-50);
+    color: var(--primary-600);
+}
+
+.success .overview-icon {
+    background-color: var(--success-50);
+    color: var(--success-600);
+}
+
+.warning .overview-icon {
+    background-color: var(--warning-50);
+    color: var(--warning-600);
+}
+
+.overview-label {
+    display: block;
+    font-size: var(--font-size-sm);
+    color: var(--text-tertiary);
+    font-weight: var(--font-weight-medium);
+    margin-bottom: 4px;
+}
+
+.overview-value {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--text-primary);
+    margin: 0;
+}
+
+/* Budget Planning Items */
+.budget-items-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+}
+
+.budget-planning-card {
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-xl);
+    transition: all var(--transition-base);
+}
+
+.budget-planning-card:hover {
+    border-color: var(--primary-200);
+    box-shadow: var(--shadow-md);
+}
+
+.budget-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-xl);
+    gap: var(--spacing-xl);
+}
+
+.budget-category {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-lg);
+    flex: 1;
+}
+
+.budget-cat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.25rem;
+}
+
+.budget-cat-info h3 {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-bold);
+    color: var(--text-primary);
+    margin: 0 0 2px 0;
+}
+
+.budget-summary-text {
+    font-size: var(--font-size-sm);
+    color: var(--text-tertiary);
+    margin: 0;
+}
+
+/* Budget Input */
+.budget-edit-group {
+    width: 180px;
+}
+
+.budget-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.currency-label {
+    position: absolute;
+    left: var(--spacing-md);
+    color: var(--text-tertiary);
+    font-weight: var(--font-weight-bold);
+}
+
+.budget-input-field {
+    width: 100%;
+    padding: 10px 12px 10px 32px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    background-color: var(--slate-50);
+    font-family: inherit;
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-primary);
+    transition: all var(--transition-fast);
+}
+
+.budget-input-field:focus {
+    outline: none;
+    border-color: var(--primary-500);
+    background-color: white;
+    box-shadow: 0 0 0 4px var(--primary-50);
+}
+
+/* Progress Section */
+.budget-card-progress {
+    padding-top: var(--spacing-lg);
+    border-top: 1px solid var(--border-light);
+}
+
+.progress-track {
+    height: 8px;
+    background-color: var(--slate-100);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+    margin-bottom: var(--spacing-md);
+}
+
+.progress-bar-fill {
+    height: 100%;
+    border-radius: var(--radius-full);
+    transition: width 0.6s cubic-bezier(0.1, 0, 0, 1);
+}
+
+.fill-good {
+    background-color: var(--success-500);
+}
+
+.fill-warning {
+    background-color: var(--warning-500);
+}
+
+.fill-exceeded {
+    background-color: var(--danger-500);
+}
+
+.progress-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.progress-status-chip {
+    padding: 4px 10px;
+    background-color: var(--slate-100);
+    color: var(--text-secondary);
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.status-good .progress-status-chip {
+    background-color: var(--success-50);
+    color: var(--success-700);
+}
+
+.status-warning .progress-status-chip {
+    background-color: var(--warning-50);
+    color: var(--warning-700);
+}
+
+.status-exceeded .progress-status-chip {
+    background-color: var(--danger-50);
+    color: var(--danger-700);
+}
+
+.progress-diff {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-secondary);
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: var(--spacing-3xl);
+    background-color: var(--bg-primary);
+    border: 2px dashed var(--border-color);
+    border-radius: var(--radius-xl);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .budget-card-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-lg);
+    }
+
+    .budget-edit-group {
+        width: 100%;
+    }
+}
