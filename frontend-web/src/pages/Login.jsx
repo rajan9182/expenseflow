@@ -171,18 +171,18 @@ const Login = () => {
                             <button
                                 type="button"
                                 className="demo-btn demo-admin"
-                                onClick={() => handleDemoLogin('admin@family.com', 'admin123')}
+                                onClick={() => handleDemoLogin('rajan@family.com', 'Rajan@123')}
                                 disabled={loading}
                             >
                                 <i className="fa-solid fa-user-tie"></i>
-                                <span className="demo-label">Admin</span>
-                                <span className="demo-email">admin@family.com</span>
+                                <span className="demo-label">Admin (Rajan)</span>
+                                <span className="demo-email">rajan@family.com</span>
                             </button>
 
                             <button
                                 type="button"
                                 className="demo-btn demo-member"
-                                onClick={() => handleDemoLogin('papa@family.com', 'papa123')}
+                                onClick={() => handleDemoLogin('papa@family.com', 'Papa@123')}
                                 disabled={loading}
                             >
                                 <i className="fa-solid fa-user"></i>
@@ -193,23 +193,12 @@ const Login = () => {
                             <button
                                 type="button"
                                 className="demo-btn demo-member"
-                                onClick={() => handleDemoLogin('mummy@family.com', 'mummy123')}
+                                onClick={() => handleDemoLogin('mummy@family.com', 'Mummy@123')}
                                 disabled={loading}
                             >
                                 <i className="fa-solid fa-user"></i>
                                 <span className="demo-label">Mummy</span>
                                 <span className="demo-email">mummy@family.com</span>
-                            </button>
-
-                            <button
-                                type="button"
-                                className="demo-btn demo-member"
-                                onClick={() => handleDemoLogin('sister@family.com', 'sister123')}
-                                disabled={loading}
-                            >
-                                <i className="fa-solid fa-user"></i>
-                                <span className="demo-label">Sister</span>
-                                <span className="demo-email">sister@family.com</span>
                             </button>
                         </div>
                     </div>
