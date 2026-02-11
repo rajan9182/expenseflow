@@ -122,8 +122,10 @@ const DebtManagement = ({ user, isAdmin }) => {
     const totalLent = debts.filter(d => d.type === 'lent').reduce((acc, d) => acc + (d.remainingAmount !== undefined ? d.remainingAmount : d.amount), 0);
 
     const filteredDebts = debts.filter(debt => {
-        const matchesSearch = debt.person.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            (debt.description && debt.description.toLowerCase().includes(searchTerm.toLowerCase()));
+        const personName = debt.person || '';
+        const description = debt.description || '';
+        const matchesSearch = personName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            description.toLowerCase().includes(searchTerm.toLowerCase());
         const matchesType = filters.type === 'all' || debt.type === filters.type;
         const matchesStatus = filters.status === 'all' || debt.status === filters.status;
         return matchesSearch && matchesType && matchesStatus;
