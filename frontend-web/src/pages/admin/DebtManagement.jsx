@@ -31,7 +31,8 @@ const DebtManagement = ({ user, isAdmin }) => {
         accountId: '',
         date: new Date().toISOString().split('T')[0],
         description: '',
-        categoryId: ''
+        categoryId: '',
+        subType: 'payment'
     });
 
     useEffect(() => {
@@ -103,7 +104,7 @@ const DebtManagement = ({ user, isAdmin }) => {
         try {
             await debtAPI.addPayment(selectedDebt._id, paymentData);
             setShowPaymentForm(false);
-            setPaymentData({ amount: '', accountId: '', date: new Date().toISOString().split('T')[0], description: '', categoryId: '' });
+            setPaymentData({ amount: '', accountId: '', date: new Date().toISOString().split('T')[0], description: '', categoryId: '', subType: 'payment' });
             fetchData();
         } catch (error) {
             alert('Failed to process payment');
@@ -405,18 +406,34 @@ const DebtManagement = ({ user, isAdmin }) => {
                         <h2>Record Payment for {selectedDebt?.person}</h2>
                         <form onSubmit={handlePaymentSubmit}>
                             <div className="form-group">
-                                <label>Payment Amount</label>
+                                <label>Transaction Type</label>
+                                <select
+                                    className="form-select"
+                                    value={paymentData.subType}
+                                    onChange={e => setPaymentData({ ...paymentData, subType: e.target.value, categoryId: '' })}
+                                    required
+                                >
+                                    <option value="payment">
+                                        {selectedDebt?.type === 'lent' ? 'Repayment (Receiving money back)' : 'Repayment (Paying money back)'}
+                                    </option>
+                                    <option value="contribution">
+                                        {selectedDebt?.type === 'lent' ? 'Additional Contribution (Giving more)' : 'Additional Borrowing (Taking more)'}
+                                    </option>
+                                </select>
+                            </div>
+                            <div className="form-group">
+                                <label>Amount</label>
                                 <input
                                     type="number"
                                     className="form-input"
                                     value={paymentData.amount}
                                     onChange={e => setPaymentData({ ...paymentData, amount: e.target.value })}
-                                    max={selectedDebt?.remainingAmount}
+                                    max={paymentData.subType === 'payment' ? selectedDebt?.remainingAmount : undefined}
                                     required
                                 />
                                 <div className="payment-validation mt-2">
-                                    <span className="text-danger font-weight-bold">
-                                        Remaining Balance: {formatCurrency(selectedDebt?.remainingAmount)}
+                                    <span className={paymentData.subType === 'payment' ? "text-danger font-weight-bold" : "text-primary font-weight-bold"}>
+                                        Current Balance: {formatCurrency(selectedDebt?.remainingAmount)}
                                     </span>
                                     {selectedDebt?.interestRate > 0 && (
                                         <div className="text-secondary small">
@@ -451,7 +468,21 @@ const DebtManagement = ({ user, isAdmin }) => {
                                     required
                                 >
                                     <option value="">Choose a category</option>
-                                    {categories.filter(c => c.type === (selectedDebt?.type === 'lent' ? 'income' : 'expense')).map(cat => (
+                                    {categories.filter(cat => {
+                                        // If LENT: 
+                                        // - Repayment (payment) is INCOME
+                                        // - Contribution (gave more) is EXPENSE
+                                        // If BORROWED:
+                                        // - Repayment (payment) is EXPENSE
+                                        // - Extra Borrow (contribution) is INCOME
+                                        let targetType;
+                                        if (selectedDebt?.type === 'lent') {
+                                            targetType = paymentData.subType === 'payment' ? 'income' : 'expense';
+                                        } else {
+                                            targetType = paymentData.subType === 'payment' ? 'expense' : 'income';
+                                        }
+                                        return cat.type === targetType;
+                                    }).map(cat => (
                                         <option key={cat._id} value={cat._id}>{cat.name}</option>
                                     ))}
                                 </select>

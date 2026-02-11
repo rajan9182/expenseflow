@@ -103,7 +103,7 @@ const createDebt = async (req, res) => {
 // @access  Private
 const addPayment = async (req, res) => {
     try {
-        const { amount, accountId, date, description, categoryId } = req.body;
+        const { amount, accountId, date, description, categoryId, subType } = req.body;
         const debt = await Debt.findById(req.params.id);
 
         if (!debt) {
@@ -115,37 +115,56 @@ const addPayment = async (req, res) => {
             return res.status(403).json({ error: 'Not authorized' });
         }
 
-        // Create the corresponding transaction (Expense or Income)
-        // If we LENT money, a payment back is INCOME.
-        // If we BORROWED money, a payment back is EXPENSE.
-        const transactionType = debt.type === 'lent' ? 'income' : 'expense';
+        const parsedAmount = parseFloat(amount) || 0;
+        const type = subType || 'payment'; // 'payment' (reducing) vs 'contribution' (increasing)
+
+        // Determine transaction type (income/expense)
+        let transactionType;
+        if (debt.type === 'lent') {
+            // If we LENT, receiving money back (payment) is INCOME, giving more (contribution) is EXPENSE
+            transactionType = type === 'payment' ? 'income' : 'expense';
+        } else {
+            // If we BORROWED, paying back (payment) is EXPENSE, borrowing more (contribution) is INCOME
+            transactionType = type === 'payment' ? 'expense' : 'income';
+        }
+
+        const title = type === 'payment'
+            ? `Payment from ${debt.person} (${debt.type === 'lent' ? 'Return' : 'Repayment'})`
+            : `${debt.type === 'lent' ? 'Additional Lent' : 'Additional Borrowing'} to/from ${debt.person}`;
 
         const transaction = await Expense.create({
             user: req.userId,
-            title: `Payment from ${debt.person} (${debt.type === 'lent' ? 'Return' : 'Repayment'})`,
-            amount: parseFloat(amount),
+            title,
+            amount: parsedAmount,
             type: transactionType,
             category: categoryId,
             account: accountId,
             date: date || new Date(),
-            description: description || `Payment for debt to/from ${debt.person}`
+            description: description || `Debt transaction for ${debt.person}`
         });
 
         // Update account balance
         const accountDoc = await Account.findById(accountId);
         if (accountDoc) {
             if (transactionType === 'income') {
-                accountDoc.balance += parseFloat(amount);
+                accountDoc.balance += parsedAmount;
             } else {
-                accountDoc.balance -= parseFloat(amount);
+                accountDoc.balance -= parsedAmount;
             }
             await accountDoc.save();
         }
 
-        // Update debt
-        debt.remainingAmount -= parseFloat(amount);
+        // Update debt remaining amount
+        if (type === 'payment') {
+            debt.remainingAmount -= parsedAmount;
+        } else {
+            debt.remainingAmount += parsedAmount;
+            // Also update total amount if we borrowed/lent more
+            debt.amount += parsedAmount;
+        }
+
         debt.transactions.push({
-            amount: parseFloat(amount),
+            amount: parsedAmount,
             date: date || new Date(),
             transactionId: transaction._id,
             type: 'payment'
